@@ -1,6 +1,5 @@
 import { Transform } from 'class-transformer';
 import {
-  IsEmail,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -11,23 +10,20 @@ import {
 
 export class SignupDto {
   @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
-  @IsEmail({}, { message: '유효하지 않은 이메일 형식입니다.' })
-  @MaxLength(255)
-  email: string;
+  @MaxLength(20, {
+    message: '아이디가 너무 깁니다. 최대 20자 이하여야 합니다.',
+  })
+  username: string;
 
   @IsString()
   @IsNotEmpty({ message: '비밀번호는 비워둘 수 없습니다.' })
   @MinLength(8, {
     message: '비밀번호가 너무 짧습니다. 최소 8자 이상이어야 합니다.',
   })
-  @MaxLength(72)
+  @MaxLength(20, {
+    message: '비밀번호가 너무 깁니다. 최대 20자 이하여야 합니다.',
+  })
   password: string;
-
-  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
-  @IsString()
-  @IsNotEmpty({ message: '닉네임은 비워둘 수 없습니다.' })
-  @MaxLength(50)
-  nickname: string;
 
   @Transform(({ value }) => {
     if (typeof value !== 'string') return value;

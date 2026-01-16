@@ -77,11 +77,11 @@
 
 a) 계정 (필수, 기본 베이스)
 
-- GET /auth/me
-- POST /auth/signup
-- POST /auth/login
-- POST /auth/logout
-- POST /auth/refresh (새로고침 시 엑세스 토큰 발급)
+- GET /auth/me ⭕
+- POST /auth/signup ⭕
+- POST /auth/login ⭕
+- POST /auth/logout ⭕
+- POST /auth/refresh (새로고침 시 엑세스 토큰 발급) ⭕
 - PATCH /auth/password (비밀번호 변경)
 
 b) 예약

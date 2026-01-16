@@ -7,6 +7,7 @@ import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshTokens } from './entities/refreshToken.entity';
 import { Customers } from 'src/reservations/entities/Customers.entity';
+import { SignupDto } from './dto/signup.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,20 @@ export class AuthService {
     private tokenService: TokenService,
     private jwtService: JwtService,
   ) {}
+
+  async signup(signupDto: SignupDto) {
+    const { username, password } = signupDto;
+    const existingUser = await this.usersRepo.findOne({ where: { username } });
+    if (existingUser)
+      throw new UnauthorizedException('이미 가입된 사용자입니다.');
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = this.usersRepo.create({
+      username,
+      hashPassword: hashedPassword,
+    });
+    await this.usersRepo.save(newUser);
+    return { message: '회원가입이 완료되었습니다.' };
+  }
 
   async login(loginDto: LoginDto) {
     const { username, password } = loginDto;
@@ -71,6 +86,15 @@ export class AuthService {
     refreshTokenRow.isRevoked = true;
     await this.tokenRepo.save(refreshTokenRow);
     return { message: '로그아웃이 완료되었습니다.' };
+  }
+
+  async me(token: string) {
+    const payload = this.jwtService.decode(token) as { sub?: string } | null;
+    const userId = payload?.sub;
+    if (!userId) throw new UnauthorizedException('유효하지 않은 토큰입니다.');
+    const user = await this.usersRepo.findOne({ where: { id: userId } });
+    if (!user) throw new UnauthorizedException('유효하지 않은 토큰입니다.');
+    return { id: user.id, username: user.username };
   }
 
   async validToken(token: string) {

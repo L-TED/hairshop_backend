@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Req,
   Res,
@@ -14,10 +15,26 @@ import {
   getClearAuthCookieOptions,
   getRefreshTokenCookieOptions,
 } from './cookie-options';
+import { SignupDto } from './dto/signup.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Get('/me')
+  async me(@Req() req: Request) {
+    const accessToken = req.cookies.accessToken;
+    if (!accessToken)
+      throw new UnauthorizedException(
+        '액세스 토큰이 없습니다. 로그인해주세요.',
+      );
+    return this.authService.me(accessToken);
+  }
+
+  @Post('/signup')
+  async signup(@Body() signupDto: SignupDto) {
+    return this.authService.signup(signupDto);
+  }
 
   @Post('/login')
   async login(
@@ -39,6 +56,7 @@ export class AuthController {
   validToken(@Body() dto: { token: string }) {
     return this.authService.validToken(dto.token);
   }
+
   @Post('/refresh')
   validRefreshToken(
     @Req() req: Request,

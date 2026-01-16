@@ -24,13 +24,4 @@ export class SignupDto {
     message: '비밀번호가 너무 깁니다. 최대 20자 이하여야 합니다.',
   })
   password: string;
-
-  @Transform(({ value }) => {
-    if (typeof value !== 'string') return value;
-    const trimmed = value.trim();
-    return trimmed.length === 0 ? undefined : trimmed;
-  })
-  @IsOptional()
-  @IsUrl({ require_protocol: true })
-  profileImageUrl?: string;
 }

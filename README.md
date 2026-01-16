@@ -28,47 +28,48 @@
 
 ### DB schemes
 
-- **customers** {
+- **customers** { ⭕
   id(uuid pk/ 고객 id),
   username(varchar not null unique/ 로그인 시 사용하는 ID),
   hash_password(varchar not null/ 로그인 시 사용하는 PW, db에 넣을 때 hash화)
   }
-- **staffs** {
+- **staffs** { ⭕
   id(serial pk/ 직원(디자이너) id, 입사 순서대로),
   name(varchar not null/ 직원 이름)
+  store_id (integer fk)
   }
-- **stores** {
+- **stores** { ⭕
   id(serial pk/ 가맹점 id),
   name(varchar not null unique/ 가맹점 이름),
   address(varchar/ 가게 주소),
   latitude(decimal(n1, n2)/ 위도),
   longitude(decimal(m1, m2)/ 경도)
   }
-- **services** {
+- **services** { ⭕
   id(serial pk/ 시술 id),
   name(varchar not null/ 시술 이름),
   price(int not null/ 시술 가격)
   }
-- **reservations** {
+- **reservations** { ⭕
   id(uuid pk/ 예약 uuid),
   status(enum('confirmed', 'canceled') not null/ 예약 상태),
   start_at(timestamp not null/ 시술 시작 시간),
-  service_id(serail fk/ 시술 id), staff_id(serial fk/ 직원 id),
+  service_id(serial fk/ 시술 id), staff_id(serial fk/ 직원 id),
   customer_id(varchar fk/ 고객 id)
   }
-- **news_posts** {
-  id(serial/ 포스트 id),
+- **news_posts** { ⭕
+  id(serial pk/ 포스트 id),
   title(varchar not null/ 포스트 제목),
   contents(text not null/ 포스트 본문),
   thumbnail_url(varchar null/ 포스트 사진, null 허용),
   created_at(datetime/ 업로드 날짜 및 시간)
   }
-- **refresh_tokens** {
+- **refresh_tokens** { ⭕
   id(serial pk/ 토큰 생성 id),
   hashed_token(varchar not null/ token 해시화),
   isRevoked(boolean not null default false/ 만료되었는지),
-  expires_at(date not null/ 만료 시간),
-  created_at(date not null/ 발급 시간),
+  expires_at(datetime not null/ 만료 시간),
+  created_at(datetime not null/ 발급 시간),
   customer_id(uuid fk/ 고객 id)
   }
 
@@ -86,7 +87,7 @@ a) 계정 (필수, 기본 베이스)
 b) 예약
 
 - GET /services (예약 시 시술 선택)
-- GET /availability?date=YYYY-MM-DD&service_id=…
+- GET /availability?date=YYYY-MM-DD&staff_id=…
   (db의 예약 날짜와 시술 등이 정보를 프론트가 받고, 시간 버튼에 사용, 반환 예시: [{start_at: "2026-01-15T08:00:00+09:00", available: true}, ...])
 - GET /reservations => 예약 목록 확인
 - GET /reservations/{id}
@@ -94,6 +95,39 @@ b) 예약
 - PATCH /reservations/{id}
 - DELETE /reservations/{id}
 
-### Exception
+### Exception(400, 401, ... , 500)
 
--
+- nest.js filter 사용
+- {
+  "success": false,
+  "status": 409
+  "path": "/reservations",
+  "timestamp": "2026-01-16T...",
+  "error": {
+  "code": "ALREADY_RESERVED",
+  "message": "해당 시간대는 이미 예약이 완료되었습니다."
+  }
+  }
+
+### Success(200, 201)
+
+- nest.js interceptor 사용
+- {
+  "success": true,
+  "status": 201
+  "path": "/reservations",
+  "timestamp": "2026-01-16T...",
+  "data": ...,
+  }
+
+### 비고
+
+###### 예약
+
+- Concurrency Exception (동시성): 예약 생성 직전 start_at과 staff_id로 중복 여부를 한 번 더 체크하는 로직을 넣고 실패 시 409 Conflict
+- Past Date Exception: 과거 날짜나 영업시간 외 예약 시도 시 400 Bad Request
+
+###### 인증
+
+- Expired Token: Refresh Token 만료 시 401 Unauthorized를 명확히 주어 프론트에서 로그인 페이지로 리다이렉트하게 유도
+- Hash 비교 실패: 로그인 시 비밀번호 불일치는 보안상 "아이디 또는 비밀번호가 틀렸습니다"로 에러 메시지를 통합

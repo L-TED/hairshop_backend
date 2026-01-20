@@ -5,13 +5,13 @@ import {
   AvailabilityController,
   ReservationsController,
 } from './reservations.controller';
-import { Reservations } from './entities/reservation.entity';
-import { Customers } from './entities/customers.entity';
-import { Staffs } from './entities/staffs.entity';
-import { Services } from 'src/services/entities/service.entity';
+import { Reservations } from './entities/reservation.entity.js';
+import { Customers } from './entities/customers.entity.js';
+import { Staffs } from './entities/staffs.entity.js';
+import { Services } from 'src/services/entities/service.entity.js';
 import { ReservationsCleanupService } from './reservations.cleanup.service.js';
-import { Stores } from './entities/stores.entity';
-import { NewsPosts } from './entities/newsPosts.entity';
+import { Stores } from './entities/stores.entity.js';
+import { NewsPosts } from './entities/newsPosts.entity.js';
 
 @Module({
   imports: [

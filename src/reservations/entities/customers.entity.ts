@@ -1,6 +1,6 @@
-import { RefreshTokens } from 'src/auth/entities/refreshToken.entity';
+import { RefreshTokens } from 'src/auth/entities/refreshToken.entity.js';
 import { Column, Entity, Index, OneToMany } from 'typeorm';
-import { Reservations } from './reservation.entity';
+import { Reservations } from './reservation.entity.js';
 
 @Index('customers_pkey', ['id'], { unique: true })
 @Index('customers_username_key', ['username'], { unique: true })
@@ -15,9 +15,15 @@ export class Customers {
   @Column('character varying', { name: 'hash_password', length: 255 })
   hashPassword: string;
 
-  @OneToMany(() => RefreshTokens, (refreshTokens) => refreshTokens.customer)
+  @OneToMany(
+    () => RefreshTokens,
+    (refreshTokens: RefreshTokens) => refreshTokens.customer,
+  )
   refreshTokens: RefreshTokens[];
 
-  @OneToMany(() => Reservations, (reservations) => reservations.customer)
+  @OneToMany(
+    () => Reservations,
+    (reservations: Reservations) => reservations.customer,
+  )
   reservations: Reservations[];
 }

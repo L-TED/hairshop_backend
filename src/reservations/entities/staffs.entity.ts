@@ -7,8 +7,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Reservations } from './reservation.entity';
-import { Stores } from './stores.entity';
+import { Reservations } from './reservation.entity.js';
+import { Stores } from './stores.entity.js';
 
 @Index('staffs_pkey', ['id'], { unique: true })
 @Entity('staffs', { schema: 'public' })
@@ -19,7 +19,10 @@ export class Staffs {
   @Column('character varying', { name: 'name', length: 255 })
   name: string;
 
-  @OneToMany(() => Reservations, (reservations) => reservations.staff)
+  @OneToMany(
+    () => Reservations,
+    (reservations: Reservations) => reservations.staff,
+  )
   reservations: Reservations[];
 
   @ManyToOne(() => Stores, (stores) => stores.staffs)

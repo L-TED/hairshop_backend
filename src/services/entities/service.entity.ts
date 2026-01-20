@@ -1,4 +1,4 @@
-import { Reservations } from 'src/reservations/entities/reservation.entity';
+import { Reservations } from 'src/reservations/entities/reservation.entity.js';
 import {
   Column,
   Entity,
@@ -20,6 +20,9 @@ export class Services {
   @Column('integer', { name: 'price' })
   price: number;
 
-  @OneToMany(() => Reservations, (reservations) => reservations.service)
+  @OneToMany(
+    () => Reservations,
+    (reservations: Reservations) => reservations.service,
+  )
   reservations: Reservations[];
 }

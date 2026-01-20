@@ -7,8 +7,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Reservations } from './reservation.entity.js';
-import { Stores } from './stores.entity.js';
+import { Reservations } from './reservation.entity';
+import { Stores } from './stores.entity';
 
 @Index('staffs_pkey', ['id'], { unique: true })
 @Entity('staffs', { schema: 'public' })

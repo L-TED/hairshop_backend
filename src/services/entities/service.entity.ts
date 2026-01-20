@@ -1,4 +1,4 @@
-import { Reservations } from 'src/reservations/entities/reservation.entity.js';
+import { Reservations } from 'src/reservations/entities/reservation.entity';
 import {
   Column,
   Entity,

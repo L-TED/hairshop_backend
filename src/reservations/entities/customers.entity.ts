@@ -1,6 +1,6 @@
-import { RefreshTokens } from 'src/auth/entities/refreshToken.entity.js';
+import { RefreshTokens } from 'src/auth/entities/refreshToken.entity';
 import { Column, Entity, Index, OneToMany } from 'typeorm';
-import { Reservations } from './reservation.entity.js';
+import { Reservations } from './reservation.entity';
 
 @Index('customers_pkey', ['id'], { unique: true })
 @Index('customers_username_key', ['username'], { unique: true })

@@ -1,7 +1,7 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
-import { Customers } from './customers.entity.js';
-import { Services } from 'src/services/entities/service.entity.js';
-import { Staffs } from './staffs.entity.js';
+import { Customers } from './customers.entity';
+import { Services } from 'src/services/entities/service.entity';
+import { Staffs } from './staffs.entity';
 
 @Index('reservations_pkey', ['id'], { unique: true })
 @Entity('reservations', { schema: 'public' })

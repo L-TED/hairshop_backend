@@ -1,4 +1,4 @@
-import { Customers } from 'src/reservations/entities/Customers.entity';
+import { Customers } from 'src/reservations/entities/Customers';
 import {
   Column,
   Entity,

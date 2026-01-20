@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ReservationsModule } from './reservations/reservations.module';
 import { ServicesModule } from './services/services.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,12 +24,15 @@ import { ServicesModule } from './services/services.module';
           username: configService.get<string>('DB_USERNAME'),
           password: configService.get<string>('DB_PASSWORD'),
           database: configService.get<string>('DB_DATABASE'),
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
           ssl: { rejectUnauthorized: false },
           autoLoadEntities: true,
           synchronize: false,
         };
       },
     }),
+    ScheduleModule.forRoot(),
+    AuthModule,
     ReservationsModule,
     ServicesModule,
   ],

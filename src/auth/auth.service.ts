@@ -6,7 +6,7 @@ import { TokenService } from './tokens.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshTokens } from './entities/refreshToken.entity';
-import { Customers } from 'src/reservations/entities/Customers.entity';
+import { Customers } from 'src/reservations/entities/Customers';
 import { SignupDto } from './dto/signup.dto';
 
 @Injectable()

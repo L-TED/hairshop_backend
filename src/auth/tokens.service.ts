@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { RefreshTokens } from './entities/refreshToken.entity';
-import { Customers } from 'src/reservations/entities/Customers.entity';
+import { Customers } from 'src/reservations/entities/Customers';
 
 @Injectable()
 export class TokenService {

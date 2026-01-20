@@ -1,7 +1,8 @@
 # 프로젝트 총기획
 
-### frontend/
+### 프론트엔드 파일 구조
 
+shop_front/
 ├── app/
 │ ├── (public)/ # 비로그인 접근 가능
 │ │ ├── layout.tsx # 공통 레이아웃 (헤더, 푸터)
@@ -20,27 +21,23 @@
 │ │ └── page.tsx # 소식 상세
 │ │
 │ ├── (protected)/ # 로그인 필수
-│ │ ├── layout.tsx # 인증 체크 레이아웃
-│ │ ├── reservation/
-│ │ │ ├── page.tsx # 예약 생성 - Step 1: 매장/디자이너 선택
-│ │ │ ├── schedule/
-│ │ │ │ └── page.tsx # Step 2: 날짜/시간 선택
-│ │ │ └── confirm/
-│ │ │ └── page.tsx # Step 3: 예약 확인
-│ │ ├── my-reservations/
-│ │ │ ├── page.tsx # 내 예약 목록
-│ │ │ └── [id]/
-│ │ │ ├── page.tsx # 예약 상세
-│ │ │ └── edit/
-│ │ │ └── page.tsx # 예약 변경
-│ │ └── my-page/
-│ │ └── page.tsx # 마이페이지 (비밀번호 변경)
-│ │
-│ └── api/ # Next.js API Routes (프록시용)
-│ └── proxy/[...path]/
-│ └── route.ts # NestJS 서버로 요청 전달
+│ ├── layout.tsx # 인증 체크 레이아웃
+│ ├── reservation/
+│ │ ├── page.tsx # 예약 생성 - Step 1: 매장/디자이너 선택
+│ │ ├── schedule/
+│ │ │ └── page.tsx # Step 2: 날짜/시간 선택
+│ │ └── confirm/
+│ │ └── page.tsx # Step 3: 예약 확인
+│ ├── my-reservations/
+│ │ ├── page.tsx # 내 예약 목록
+│ │ └── [id]/
+│ │ ├── page.tsx # 예약 상세
+│ │ └── edit/
+│ │ └── page.tsx # 예약 변경
+│ └── my-page/
+│ └── page.tsx # 마이페이지 (비밀번호 변경)
 │
-├── components/
+├── components/ ⭕
 │ ├── auth/
 │ │ ├── LoginForm.tsx # 로그인 폼 (username, password input + 제출)
 │ │ ├── SignupForm.tsx # 회원가입 폼
@@ -55,8 +52,7 @@
 │ │ └── ReservationList.tsx # 예약 목록 테이블
 │ │
 │ ├── store/
-│ │ ├── StoreCard.tsx # 매장 카드 (지도 아이콘, 주소)
-│ │ └── StoreMap.tsx # 카카오맵/네이버맵 임베드
+│ │ └── StoreCard.tsx # 매장 카드 (지도 아이콘, 주소)
 │ │
 │ ├── news/
 │ │ ├── NewsCard.tsx # 소식 썸네일 카드
@@ -72,7 +68,7 @@
 │ ├── Input.tsx # 재사용 인풋
 │ ├── Modal.tsx # 모달 다이얼로그
 │ ├── Loading.tsx # 로딩 스피너
-│ └── ErrorBoundary.tsx # 에러 처리
+│ └── ErrorBoundary.tsx # 에러 처리 ⭕
 │
 ├── api/
 │ └── services/
@@ -94,12 +90,12 @@
 │ ├── useAvailability.ts # 예약 가능 시간 조회 훅
 │ └── useRefreshToken.ts # 토큰 자동 갱신 훅
 │
-├── types/
+├── types/ ⭕
 │ ├── auth.ts # Customer, LoginRequest, TokenResponse
 │ ├── reservation.ts # Reservation, ReservationStatus
 │ ├── store.ts # Store, Staff
 │ ├── service.ts # Service
-│ └── news.ts # NewsPost
+│ └── news.ts # NewsPost ⭕
 │
 ├── utils/
 │ ├── timeSlot.ts # 시간대 생성 (8:00-20:00, 12:00-13:00 제외)
@@ -153,8 +149,8 @@
   id(serial pk/ 가맹점 id),
   name(varchar not null unique/ 가맹점 이름),
   address(varchar/ 가게 주소),
-  latitude(decimal(n1, n2)/ 위도),
-  longitude(decimal(m1, m2)/ 경도)
+  latitude(decimal(n1, n2)/ 위도) - 제외
+  longitude(decimal(m1, m2)/ 경도) - 제외
   }
 - **services** { ⭕
   id(serial pk/ 시술 id),
@@ -197,14 +193,14 @@ a) 계정 (필수, 기본 베이스)
 
 b) 예약
 
-- GET /services (예약 시 시술 선택)
-- GET /availability?date=YYYY-MM-DD&staff_id=…
+- GET /services (예약 시 시술 선택) ⭕
+- GET /availability?date=YYYY-MM-DD&staff_id=… ⭕
   (db의 예약 날짜와 시술 등이 정보를 프론트가 받고, 시간 버튼에 사용, 반환 예시: [{start_at: "2026-01-15T08:00:00+09:00", available: true}, ...])
-- GET /reservations => 예약 목록 확인
-- GET /reservations/{id}
-- POST /reservations
-- PATCH /reservations/{id}
-- DELETE /reservations/{id}
+- GET /reservations => 예약 목록 조회 ⭕
+- GET /reservations/{id} => 예약 상세 조회 ⭕
+- POST /reservations => 예약 등록(생성) ⭕
+- PATCH /reservations/{id} => 예약 수정 ⭕
+- DELETE /reservations/{id} => 예약 취소(reservations.status를 'canceled'로 변경, 7일 이후 삭제) ⭕
 
 ### Exception(400, 401, ... , 500)
 

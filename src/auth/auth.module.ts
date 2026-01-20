@@ -5,7 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TokenService } from './tokens.service';
 import { AuthService } from './auth.service';
-import { Customers } from 'src/reservations/entities/Customers';
+import { Customers } from 'src/reservations/entities/customers.entity';
 import { RefreshTokens } from './entities/refreshToken.entity';
 
 @Module({

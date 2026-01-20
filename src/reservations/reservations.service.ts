@@ -7,10 +7,10 @@ import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Reservations } from './entities/Reservation.entity';
-import { Customers } from './entities/Customers';
+import { Reservations } from './entities/reservation.entity';
+import { Customers } from './entities/customers.entity';
 import { Services } from 'src/services/entities/service.entity';
-import { Staffs } from './entities/Staffs';
+import { Staffs } from './entities/staffs.entity';
 import { randomUUID } from 'crypto';
 
 @Injectable()

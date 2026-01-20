@@ -4,9 +4,11 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Stores } from './Stores';
+import { Reservations } from './reservation.entity';
+import { Stores } from './stores.entity';
 
 @Index('staffs_pkey', ['id'], { unique: true })
 @Entity('staffs', { schema: 'public' })
@@ -16,6 +18,9 @@ export class Staffs {
 
   @Column('character varying', { name: 'name', length: 255 })
   name: string;
+
+  @OneToMany(() => Reservations, (reservations) => reservations.staff)
+  reservations: Reservations[];
 
   @ManyToOne(() => Stores, (stores) => stores.staffs)
   @JoinColumn([{ name: 'store_id', referencedColumnName: 'id' }])

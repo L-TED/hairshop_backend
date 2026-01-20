@@ -1,7 +1,7 @@
-import { Services } from 'src/services/entities/service.entity';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
-import { Customers } from './Customers';
-import { Staffs } from './Staffs';
+import { Customers } from './customers.entity';
+import { Services } from 'src/services/entities/service.entity';
+import { Staffs } from './staffs.entity';
 
 @Index('reservations_pkey', ['id'], { unique: true })
 @Entity('reservations', { schema: 'public' })
@@ -23,7 +23,7 @@ export class Reservations {
   @JoinColumn([{ name: 'service_id', referencedColumnName: 'id' }])
   service: Services;
 
-  @ManyToOne(() => Staffs)
+  @ManyToOne(() => Staffs, (staffs) => staffs.reservations)
   @JoinColumn([{ name: 'staff_id', referencedColumnName: 'id' }])
   staff: Staffs;
 }

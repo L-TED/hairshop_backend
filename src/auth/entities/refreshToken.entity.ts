@@ -1,4 +1,4 @@
-import { Customers } from 'src/reservations/entities/Customers';
+import { Customers } from 'src/reservations/entities/customers.entity';
 import {
   Column,
   Entity,
@@ -17,7 +17,7 @@ export class RefreshTokens {
   @Column('character varying', { name: 'hashed_token', length: 255 })
   hashedToken: string;
 
-  @Column('boolean', { name: 'is_revoked', default: () => 'false' })
+  @Column('boolean', { name: 'isRevoked', default: () => 'false' })
   isRevoked: boolean;
 
   @Column('timestamp without time zone', { name: 'expires_at' })

@@ -154,19 +154,20 @@ shop_front/
   }
 - **services** { ⭕
   id(serial pk/ 시술 id),
-  name(varchar not null/ 시술 이름),
+  name(varchar not null unique/ 시술 이름),
   price(int not null/ 시술 가격)
   }
 - **reservations** { ⭕
   id(uuid pk/ 예약 uuid),
   status(enum('confirmed', 'canceled') not null/ 예약 상태),
   start_at(timestamp not null/ 시술 시작 시간),
-  service_id(serial fk/ 시술 id), staff_id(serial fk/ 직원 id),
+  service_id(int fk/ 시술 id),
   customer_id(varchar fk/ 고객 id)
+  staff_id(int fk/ 직원 id)
   }
 - **news_posts** { ⭕
   id(serial pk/ 포스트 id),
-  title(varchar not null/ 포스트 제목),
+  title(varchar not null unique/ 포스트 제목),
   contents(text not null/ 포스트 본문),
   thumbnail_url(varchar null/ 포스트 사진, null 허용),
   created_at(datetime/ 업로드 날짜 및 시간)

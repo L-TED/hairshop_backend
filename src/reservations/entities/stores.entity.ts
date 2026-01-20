@@ -5,7 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Staffs } from './Staffs';
+import { Staffs } from './staffs.entity';
 
 @Index('stores_address_key', ['address'], { unique: true })
 @Index('stores_pkey', ['id'], { unique: true })

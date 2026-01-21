@@ -12,9 +12,15 @@ import { RefreshTokens } from './entities/refreshToken.entity';
   imports: [
     TypeOrmModule.forFeature([Customers, RefreshTokens]),
     JwtModule.registerAsync({
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get('TOKEN_SECRET'),
-      }),
+      useFactory: (configService: ConfigService) => {
+        const secret = configService.get<string>('TOKEN_SECRET');
+
+        if (!secret) {
+          throw new Error('JWT secret is missing. Set env TOKEN_SECRET');
+        }
+
+        return { secret };
+      },
       inject: [ConfigService],
       imports: [ConfigModule],
     }),

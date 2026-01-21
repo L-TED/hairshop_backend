@@ -133,6 +133,12 @@ shop_front/
 - 인증 요구 => 기본적으로 모든 UI는 로그인 없이 공개.
   단, 예약과 관련된 기능들은 모두 로그인 필수(엑세스, 리프레시 토큰 필요)
 
+### Env (중요)
+
+- `TOKEN_SECRET` (필수): JWT 서명/검증에 사용되는 시크릿 키
+  - Render에서 누락되면 로그인 시 `secretOrPrivateKey must have a value`로 500이 발생할 수 있음
+  - 호환 키: `JWT_SECRET`
+
 ### DB schemes
 
 - **customers** { ⭕

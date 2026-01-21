@@ -203,7 +203,7 @@ b) 예약
 - PATCH /reservations/{id} => 예약 수정 ⭕
 - DELETE /reservations/{id} => 예약 취소(reservations.status를 'canceled'로 변경, 7일 이후 삭제) ⭕
 
-### Exception(400, 401, ... , 500)
+### Exception(400, 401, ... , 500) ⭕
 
 - nest.js filter 사용
 - {

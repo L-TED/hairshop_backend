@@ -15,6 +15,11 @@ export class AllExceptionFilter implements ExceptionFilter {
     const req = ctx.getRequest();
 
     const isHttp = err instanceof HttpException;
+    if (!isHttp) {
+      // Keep response generic, but log full error for debugging (e.g., Render logs)
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
     const statusCode = isHttp
       ? err.getStatus()
       : HttpStatus.INTERNAL_SERVER_ERROR;

@@ -10,8 +10,8 @@ import { Customers } from './entities/customers.entity';
 import { Staffs } from './entities/staffs.entity';
 import { Services } from 'src/services/entities/service.entity';
 import { ReservationsCleanupService } from './reservations.cleanup.service';
-import { Stores } from './entities/stores.entity';
-import { NewsPosts } from './entities/newsPosts.entity';
+import { Stores } from 'src/stores/entities/store.entity';
+import { NewsPosts } from 'src/news_posts/entities/news_post.entity';
 
 @Module({
   imports: [

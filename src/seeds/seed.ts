@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 import { AppDataSource } from '../database/data-source';
-import { Stores } from 'src/reservations/entities/stores.entity';
 import { Staffs } from 'src/reservations/entities/staffs.entity';
 import { Services } from 'src/services/entities/service.entity';
-import { NewsPosts } from 'src/reservations/entities/newsPosts.entity';
+import { Stores } from 'src/stores/entities/store.entity';
+import { NewsPosts } from 'src/news_posts/entities/news_post.entity';
 
 async function main() {
   if (

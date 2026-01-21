@@ -54,8 +54,8 @@ export class ReservationsService {
     return this.reservationsRepository.save(reservation);
   }
 
-  findAll() {
-    return this.reservationsRepository.find({
+  async findAll() {
+    return await this.reservationsRepository.find({
       relations: {
         customer: true,
         service: true,

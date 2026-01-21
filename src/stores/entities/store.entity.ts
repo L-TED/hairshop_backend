@@ -1,3 +1,4 @@
+import { Staffs } from 'src/reservations/entities/staffs.entity';
 import {
   Column,
   Entity,
@@ -5,7 +6,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Staffs } from './staffs.entity';
 
 @Index('stores_address_key', ['address'], { unique: true })
 @Index('stores_pkey', ['id'], { unique: true })

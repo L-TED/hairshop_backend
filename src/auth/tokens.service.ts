@@ -39,6 +39,7 @@ export class TokenService {
       hashedToken: hashedToken,
       customer: { id: userId } as Customers,
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now()),
     });
     await this.tokenRepo.save(newToken);
     return refreshToken;

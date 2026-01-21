@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { randomUUID } from 'crypto';
 import { TokenService } from './tokens.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -26,6 +27,7 @@ export class AuthService {
       throw new UnauthorizedException('이미 가입된 사용자입니다.');
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = this.usersRepo.create({
+      id: randomUUID(),
       username,
       hashPassword: hashedPassword,
     });

@@ -25,9 +25,15 @@ import { AuthModule } from './auth/auth.module';
           password: configService.get<string>('DB_PASSWORD'),
           database: configService.get<string>('DB_DATABASE'),
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          migrations: [__dirname + '/database/migrations/**/*{.ts,.js}'],
           ssl: { rejectUnauthorized: false },
           autoLoadEntities: true,
           synchronize: false,
+          migrationsRun:
+            String(
+              configService.get<string>('MIGRATIONS_RUN') ?? '',
+            ).toLowerCase() === 'true' ||
+            configService.get<string>('MIGRATIONS_RUN') === '1',
         };
       },
     }),

@@ -1,4 +1,4 @@
-import { Staffs } from 'src/reservations/entities/staffs.entity';
+import { Staffs } from 'src/staffs/entities/staff.entity';
 import {
   Column,
   Entity,

@@ -9,6 +9,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { AuthModule } from './auth/auth.module';
 import { StoresModule } from './stores/stores.module';
 import { NewsPostsModule } from './news_posts/news_posts.module';
+import { StaffsModule } from './staffs/staffs.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { NewsPostsModule } from './news_posts/news_posts.module';
     ServicesModule,
     StoresModule,
     NewsPostsModule,
+    StaffsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

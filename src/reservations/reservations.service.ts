@@ -8,10 +8,10 @@ import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Reservations } from './entities/reservation.entity';
-import { Customers } from './entities/customers.entity';
+import { Customers } from './entities/customer.entity';
 import { Services } from 'src/services/entities/service.entity';
-import { Staffs } from './entities/staffs.entity';
 import { randomUUID } from 'crypto';
+import { Staffs } from 'src/staffs/entities/staff.entity';
 
 @Injectable()
 export class ReservationsService {

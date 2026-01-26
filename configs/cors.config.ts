@@ -99,4 +99,6 @@ export const corsConfig = {
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
   // Some Safari/iOS clients are picky about 204 for preflight.
   optionsSuccessStatus: 200,
+  sameSite: 'none',
+  setCookie: 'Secure',
 };

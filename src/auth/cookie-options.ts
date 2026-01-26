@@ -1,4 +1,4 @@
-import type { CookieOptions } from 'express';
+import type { CookieOptions, Request } from 'express';
 
 function normalizeCookieDomain(raw: string | undefined): string | undefined {
   if (!raw) return undefined;
@@ -19,12 +19,28 @@ function toBoolean(raw: string | undefined): boolean | undefined {
   return undefined;
 }
 
-export function getAuthCookieBaseOptions(): CookieOptions {
+export function getAuthCookieBaseOptions(req?: Request): CookieOptions {
   const isProduction = process.env.NODE_ENV === 'production';
 
-  // Default: secure cookies in production.
+  // When running behind a TLS-terminating proxy (e.g. Render), NODE_ENV may not
+  // be set to production. Derive HTTPS from the incoming request when possible.
+  // Note: `app.set('trust proxy', 1)` is enabled in `src/main.ts`.
+  const isRequestSecure = (): boolean => {
+    if (!req) return false;
+    if (req.secure) return true;
+    const forwardedProto = String(req.headers['x-forwarded-proto'] ?? '')
+      .split(',')[0]
+      .trim()
+      .toLowerCase();
+    return forwardedProto === 'https';
+  };
+
+  const requestSecure = isRequestSecure();
+
+  // Default: secure cookies for HTTPS requests or in production.
   // Override with COOKIE_SECURE=true/false when needed.
-  let secure = toBoolean(process.env.COOKIE_SECURE) ?? isProduction;
+  let secure =
+    toBoolean(process.env.COOKIE_SECURE) ?? (isProduction || requestSecure);
 
   // Default: SameSite=None when secure (cross-site), else Lax for local HTTP.
   let sameSite =
@@ -45,23 +61,23 @@ export function getAuthCookieBaseOptions(): CookieOptions {
   };
 }
 
-export function getAccessTokenCookieOptions(): CookieOptions {
+export function getAccessTokenCookieOptions(req?: Request): CookieOptions {
   return {
-    ...getAuthCookieBaseOptions(),
+    ...getAuthCookieBaseOptions(req),
     maxAge: 15 * 60 * 1000,
   };
 }
 
-export function getRefreshTokenCookieOptions(): CookieOptions {
+export function getRefreshTokenCookieOptions(req?: Request): CookieOptions {
   return {
-    ...getAuthCookieBaseOptions(),
+    ...getAuthCookieBaseOptions(req),
     maxAge: 7 * 24 * 60 * 60 * 1000,
   };
 }
 
-export function getClearAuthCookieOptions(): CookieOptions {
+export function getClearAuthCookieOptions(req?: Request): CookieOptions {
   // clearCookie needs the same path/domain/samesite/secure to match
   return {
-    ...getAuthCookieBaseOptions(),
+    ...getAuthCookieBaseOptions(req),
   };
 }

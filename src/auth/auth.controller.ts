@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  ForbiddenException,
   Get,
   Post,
   Req,
@@ -39,14 +40,15 @@ export class AuthController {
   @Post('/login')
   async login(
     @Body() loginDto: LoginDto,
+    @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
     const { access, refresh } = await this.authService.login(loginDto);
 
     // accessToken: API 호출용 (AuthGuard가 쿠키/헤더 모두 지원)
-    res.cookie('accessToken', access, getAccessTokenCookieOptions());
+    res.cookie('accessToken', access, getAccessTokenCookieOptions(req));
 
-    res.cookie('refreshToken', refresh, getRefreshTokenCookieOptions());
+    res.cookie('refreshToken', refresh, getRefreshTokenCookieOptions(req));
 
     // 프론트 호환: accessToken 키로도 내려줌
     return { accessToken: access, access };
@@ -58,22 +60,34 @@ export class AuthController {
   }
 
   @Post('/refresh')
-  validRefreshToken(
+  async validRefreshToken(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
     const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken)
-      throw new UnauthorizedException(
+    const clearOptions = getClearAuthCookieOptions(req);
+
+    // 프론트에서 401 발생 시 refresh를 재시도하는 인터셉터가 있을 경우
+    // refresh 자체가 401을 내면 무한 루프가 날 수 있어 403으로 응답합니다.
+    if (!refreshToken) {
+      res.clearCookie('accessToken', clearOptions);
+      res.clearCookie('refreshToken', clearOptions);
+      throw new ForbiddenException(
         '리프레시 토큰이 없습니다. 다시 로그인해주세요.',
       );
+    }
 
-    return this.authService
-      .validRefreshToken(refreshToken)
-      .then(({ access }) => {
-        res.cookie('accessToken', access, getAccessTokenCookieOptions());
-        return { accessToken: access, access };
-      });
+    try {
+      const { access } = await this.authService.validRefreshToken(refreshToken);
+      res.cookie('accessToken', access, getAccessTokenCookieOptions(req));
+      return { accessToken: access, access };
+    } catch {
+      res.clearCookie('accessToken', clearOptions);
+      res.clearCookie('refreshToken', clearOptions);
+      throw new ForbiddenException(
+        '리프레시 토큰이 유효하지 않습니다. 다시 로그인해주세요.',
+      );
+    }
   }
 
   @Post('/logout')
@@ -83,7 +97,7 @@ export class AuthController {
       throw new UnauthorizedException(
         '리프레시 토큰이 없습니다. 다시 로그인해주세요.',
       );
-    const clearOptions = getClearAuthCookieOptions();
+    const clearOptions = getClearAuthCookieOptions(req);
     res.clearCookie('accessToken', clearOptions);
     res.clearCookie('refreshToken', clearOptions);
     return this.authService.logout(refreshToken);

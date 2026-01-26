@@ -100,5 +100,5 @@ export const corsConfig = {
   // Some Safari/iOS clients are picky about 204 for preflight.
   optionsSuccessStatus: 200,
   sameSite: 'none',
-  setCookie: 'Secure',
+  secure: true,
 };

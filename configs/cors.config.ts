@@ -61,7 +61,7 @@ function isOriginAllowed(origin: string, allowList: string[]): boolean {
 }
 
 const defaultOrigins = [
-  'https://leafpost-front-final.vercel.app',
+  'https://hairshop-frontend.vercel.app/',
   // Optional: allow configuring the front origin in env
   ...(process.env.FRONTEND_ORIGIN ? [process.env.FRONTEND_ORIGIN] : []),
 ].map(normalizeOrigin);
